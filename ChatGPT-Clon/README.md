@@ -1,12 +1,46 @@
-# React + Vite
+# Proyecto: DevfSeek V.48R4H4M 🐋
+## Autor: Abraham Medina
+## Sensei: Daniel Gloria 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
 
-Currently, two official plugins are available:
+##  🤖 Estructura del Proyecto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Este repositorio contiene el desarrollo paso a paso de una aplicación web con React en el frontend y Express en el backend. Cada **rama** (`parte-1`, `parte-2`, etc.) corresponde a un tema o módulo independiente del curso. 
 
-## Expanding the ESLint configuration
+El objetivo es aprender desde la configuración inicial del proyecto hasta la implementación de un backend con Express, bases de datos y consumo de IA mediante Ollama.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## Funcionalidad del Chat Base: Proporcionada por DEVF
+
+```javascript
+const [messages, setMessages] = useState([]);
+const [input, setInput] = useState("");
+
+const sendMessage = async (e) => {
+  if (!input.trim()) return;
+  setMessages([...messages, { text: input, sender: "user" }]);
+  setInput("");
+
+  setTimeout(() => {
+    setMessages((prev) => [
+      ...prev,
+      { text: "Respuesta generada...", sender: "bot" },
+    ]);
+  }, 1000);
+};
+```
+
+---
+
+## Índice de Entregables
+
+---
+
+## Parte 1: React Hook Form y Validación de Formularios Avanzada
+
+**Rama:** `parte-1`
+**Descripción:** Implementación de formularios en React utilizando React Hook Form y técnicas avanzadas de validación. Uso de la IA para creación de un FrontEnd básico. Configuración inicial del proyecto, instalación de Tailwind CSS y creación de un diseño básico para la interfaz de usuario.
+
+---
