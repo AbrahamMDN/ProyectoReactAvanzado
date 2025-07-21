@@ -45,9 +45,9 @@ const sendMessage = async (e) => {
 
 ---
 
-## Parte 2: Consumo de APIs y manejo de Ollama
+## Parte 2: Consumo de APIs (useEffect) y manejo de Ollama
 
 **Rama:** `parte-2`
-**Descripción:** Instalación de Ollama e integración con un modelo de IA ligero. Creación de un Custom Hook para consumir la API y manejar datos asíncronos. Adición del componente History en su primera versión para en un siguiente paso gestionar las consultas previas.
+**Descripción:** Instalación de Ollama e integración con un modelo de IA ligero. Creación de un Custom Hook para el servicio *deepseek-r1:1.5b.* Uso de `useEffect` en React para consumir la API y manejar datos asíncronos. Adición del componente History en su primera versión para en un siguiente paso gestionar las consultas previas.
 
 ---
