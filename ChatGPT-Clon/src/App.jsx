@@ -1,4 +1,4 @@
-/* App.js Versión Entregable 1 utilizando React Hook Form y Tailwind CSS*/
+/* App.js Versión Entregable 1.5: Se añade simulación de respuesta del bot */
 
 // Importación de hooks, biblioteca Zod y elemento SendHorizontal
 import React, { useState } from 'react';
@@ -34,6 +34,14 @@ export default function App(){
   const onSubmit = (data) => {
     setMessages((prev) => [...prev, { text: data.text, sender: "user" }]);
     reset();
+
+  // Se simula la respuesta del bot con una función que se ejecuta después de 1 segundo, creando una pausa temporal similar al tiempo de espera que tiene una IA mientras piensa
+    setTimeout(() => {
+      setMessages((prev) => [
+        ...prev,
+        { text: "Respuesta generada...", sender: "bot" },
+      ]);
+    }, 1000);
   };
 
   return(
