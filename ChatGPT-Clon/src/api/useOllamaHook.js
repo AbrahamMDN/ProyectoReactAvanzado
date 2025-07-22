@@ -1,3 +1,5 @@
+/* Modificación del custom Hook para stream = true */
+
 // Importación de hook useState
 import { useState } from 'react';
 
@@ -28,20 +30,64 @@ function useOllamaHook() {
           // Limita la extensión (longitud) de la respuesta con la unidad interna de texto que maneja el modelo (token)
           max_tokens: 500,
           // No proporciona respuestas en tiempo real, sino sólo una al formularla completa 
-          stream: false
+          stream: true
         }),
       });
 
       // Si no se obtiene una respuesta válida, se señala el error y se muestra 
-      if (!res.ok) throw new Error(`Respuesta inválida: HTTP error ${res.status}`);
+      if (!res.ok || !res.body) {
+        throw new Error(`Respuesta inválida: HTTP error ${res.status}`);
+      };
 
-    // Se espera la respuesta en formato json, se almacena en data y se actualiza en el estado de la respuesta
-      const data = await res.json();
-      setResponse(data.response.trim());
+      // Se nombra como reader a la obtención de un lector de fragmentos stream
+      const reader = res.body.getReader();
+      // Se crea un decodificador para los fragmentos binarios y así poder interpretarlos como texto legible
+      const decoder = new TextDecoder('utf-8');
+      // Se define una variable buffer que acumulará los textos parciales, por si aparecen líneas incompletas
+      let buffer = '';
 
-      // Si hay un error global en la interacción, se imprime el mensaje y se almacena en el estado de errores 
+      // Se crea una ciclo while que se ejecuta mientras exista una respuesta 
+      while (true) {
+        // Se inicializa la función de lectura con sus parámetros de ejecución. Se espera a que se lean los fragmentos asincrónicamente hasta que ya no existan datos y entonces se detiene el ciclo
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        // Se decodifica el fragmento actual (value) y se agrega al buffer acumulado
+        buffer += decoder.decode(value, { stream: true });
+
+        /* Procesamiento de líneas completas */
+        // Se divide el texto por saltos de línea (porque cada línea es un JSON separado) y se almacena en la variable lines. 
+        const lines = buffer.split('\n');
+        // La última línea se guarda incompleta para que se procese bien en la siguiente iteración.
+        buffer = lines.pop();
+
+        // Se recorre cada línea completa y se ignoran las líneas vacías.
+        for (const line of lines) {
+          if (!line.trim()) continue;
+
+          try {
+            // Se intenta parsear la línea como JSON 
+            const parsed = JSON.parse(line);
+            // Si el parseo fue exitoso, se finaliza el bucle, se imprime en consola un mensaje que lo señala y no se retornan elementos
+            if (parsed.done) {
+              console.log('Parseo generado exitosamente'); 
+              setLoading(false);
+              return;
+            }
+            // Si la línea tiene contenido generado (response), lo agrega al estado de la respuesta junto al contenido previamente almacenado
+            if (parsed.response) {
+              setResponse((prev) => prev + parsed.response);
+            }
+            // Si alguna línea no cuenta con un formato JSON válido, se muestra una advertencia
+          } catch (err) {
+            console.warn('Error parseando línea JSON', err, line);
+          };
+        };
+      };
+      // Si hay un error global en la manipulación del streaming, se imprime el mensaje y se almacena en el estado de errores. Se muestra en consola
     } catch (err) {
-      setError(err.message || 'Error al conectar con Deepseek');
+      console.error('Error en streaming:', err);
+      setError(err.message || 'Error en streaming');
       // Al obtenerse la respuesta final, se actualiza el estado de carga a terminado
     } finally {
       setLoading(false);

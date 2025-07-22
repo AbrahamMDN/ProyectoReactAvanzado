@@ -1,4 +1,4 @@
-/* App.js Versión Entregable 2: Se implementa consumo de la API para stream = false */
+/* App.js Versión Entregable 2.5: Se implementa consumo de la API para stream = true */
 
 // Importación de hooks, biblioteca Zod y elemento SendHorizontal. Adición de custom hook y useEffect para consumo del servicio de Ollama
 import React, { useState, useEffect } from 'react';
@@ -33,9 +33,13 @@ export default function App(){
     resolver: zodResolver(messageSchema),
   });
 
-  // Definición de una función que actualiza los mensajes guardados y reinicia los inputs del formulario 
+  // Definición de una función que actualiza los mensajes guardados (tanto de user como de DeepSeek) y reinicia los inputs del formulario 
   const onSubmit = (data) => {
-    setMessages((prev) => [...prev, { text: data.text, sender: "user" }]);
+    setMessages((prev) => [
+      ...prev, 
+      { text: data.text, sender: "user" }, 
+      { text: "", sender: "DeepSeek" }
+    ]);
     reset();
 
   // Ejecución de la función handleSubmit del custom hook con el promt proporcionado y almacenado en la variable data
@@ -47,12 +51,31 @@ export default function App(){
     // Si no se obtuvo una respuesta, no se retorna nada
     if (!ollamaHook.response) return;
     
-    // Se actualiza el estado de los mensajes cargando los ya almacenados y, a continuación, la respuesta actual (indicando que el mensajero es DeepSeek)
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      { text: ollamaHook.response, sender: "DeepSeek" },
-    ]);
-    // Se ejecuta cada que se obtiene una nueva respuesta de Deepseek
+    // Se actualiza el estado de los mensajes cargando los ya almacenados y, a continuación, se integrarán los chunks que se vayan obteniendo de la respuesta de DeepSeek
+    setMessages((prevMessages) => {
+      // Se crea un arreglo que integra los mensajes ya almacenados
+      const updatedMessages = [...prevMessages];
+    // Se crea un arreglo que almacena la nueva variable creada y a continuación, se invierte el array de mensajes, se busca el índice del último fragmento de mensaje enviado por DeepSeek y se guarda en la misma variable, lastDSIndex.
+      const lastDSIndex = [...updatedMessages]
+        .reverse()
+        .findIndex((msg) => msg.sender === "DeepSeek");
+
+      // Si el índice del fragmento de mensaje recibido no corresponde al último del arreglo, se calcula su índice real
+      if (lastDSIndex !== -1) {
+        const realIndex = updatedMessages.length - 1 - lastDSIndex;
+        // Se actualizan el texto y el índice real con los valores de la respuesta correspondiente. Esto ayuda a construir la respuesta en tiempo real en el orden y estructura correcta durante el ensamble en un solo mensaje consolidado
+        updatedMessages[realIndex] = {
+          ...updatedMessages[realIndex],
+          text: ollamaHook.response,
+        };
+        // Si el índice del fragmento de respuesta si corresponde al útlimo del arreglo, se añade el mensaje al final del mismo
+      } else {
+        updatedMessages.push({ text: ollamaHook.response, sender: "DeepSeek" });
+      }
+      // Se retorna el arreglo final consolidado, que será el estado actualizado de mensajes
+      return updatedMessages;
+    });
+    // El efecto solo se ejecuta cuando hay una interacción con la IA (Envío de un prompt)
   }, [ollamaHook.response]);
 
   return(
@@ -70,9 +93,9 @@ export default function App(){
           >
             {msg.text}
             {/* Aparición de puntos suspensivos después del texto mientras el estado de carga sea true */}
-            {/* En este caso no se aprecia su efecto, ya que al manejarse un stream = false, la respuesta no aparece en tiempo real y el div de la respuesta se crea hasta que el estado de carga ya no cumple la condición necesaria */}
-            {ollamaHook.loading && msg.sender === "DeepSeek" && (
-              <span className="ml-2 animate-pulse"> Pensando... </span>
+            {/* Son visibles mientras el índice del fragmento de mensaje es el último de la respuesta */}
+            {ollamaHook.loading && msg.sender === "DeepSeek" && index === messages.length - 1 && (
+              <span className="ml-2 animate-pulse"> ... </span>
             )}
           </div>  
         ))}
