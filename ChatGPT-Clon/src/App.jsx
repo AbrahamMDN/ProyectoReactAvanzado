@@ -1,12 +1,13 @@
-/* App.js Versión Entregable 2.5: Se implementa consumo de la API para stream = true */
+/* App.js Versión Entregable 3: Se implementa uso del contexto global */
 
-// Importación de hooks, biblioteca Zod y elemento SendHorizontal. Adición de custom hook y useEffect para consumo del servicio de Ollama
+// Importación de hooks, biblioteca Zod, elemento SendHorizontal y contexto global. Adición de custom hook y useEffect para consumo del servicio de Ollama
 import React, { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SendHorizontal } from "lucide-react";
 import useOllamaHook from "./api/useOllamaHook";
+import { useGlobal } from "./context/GlobalContext";
 
 // Esquema de validación con Zod
 const messageSchema = z.object({
@@ -22,6 +23,8 @@ export default function App(){
   const [messages, setMessages] = useState([]);
   // Se crea una variable que simplifica el llamado al custom hook de la API al nombrar la acción
   const ollamaHook = useOllamaHook();
+  // Se crea una variable que simplifica el llamado al contexto global
+  const hook = useGlobal();
 
   // Definición de estados y acciones del formulario
   const {
@@ -77,6 +80,16 @@ export default function App(){
     });
     // El efecto solo se ejecuta cuando hay una interacción con la IA (Envío de un prompt)
   }, [ollamaHook.response]);
+
+  // Implementación del efecto que dispara eventos al contexto global cuando cambia el historial
+  useEffect(() => {
+    // Si no hay mensajes, no se devuelve nada
+    if (!messages.length) return;
+    // Se crea un evento para el chat actual que adiciona los mensajes al contexto global
+    const event = { type: "@current_chat", payload: messages };
+    hook.dispatch(event);
+    // eslint-disable-next-line
+  }, [messages]);
 
   return(
     <div className="flex flex-col h-screen w-full bg-gray-900 text-white justify-end">

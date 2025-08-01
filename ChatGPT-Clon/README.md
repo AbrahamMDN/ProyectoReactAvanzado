@@ -51,3 +51,10 @@ const sendMessage = async (e) => {
 **Descripción:** Instalación de Ollama e integración con un modelo de IA ligero. Creación de un Custom Hook para el servicio *deepseek-r1:1.5b.* Uso de `useEffect` en React para consumir la API y manejar datos asíncronos. Adición del componente History en su primera versión para en un siguiente paso gestionar las consultas previas.
 
 ---
+
+## Parte 3: Gestión de Estados con useContext
+
+**Rama:** `parte-3`
+**Descripción:** Gestión del estado global en una aplicación React utilizando el hook `useContext`. Manejo de historial de interacciones con `useReducer` y `useContext`.
+
+---
