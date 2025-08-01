@@ -60,7 +60,7 @@ function globalReducer(state, action) {
         }
         // Si no es una acción esperada, se genera un nuevo error
         default: {
-            throw new Error(`Unhandled action type: ${action.type}`);
+            throw new Error(`Tipo de acción no controlada: ${action.type}`);
         }
     }
 };
@@ -83,7 +83,7 @@ function useGlobal() {
   const context = React.useContext(GlobalContext);
   // Si no hay un contexto definido, se genera un nuevo error que lo señala
   if (context === undefined) {
-    throw new Error("useGlobal must be used within a GlobalProvider");
+    throw new Error("useGlobal debe usarse dentro de un GlobalProvider");
   }
 
   return context;
