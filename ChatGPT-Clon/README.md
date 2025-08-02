@@ -59,9 +59,23 @@ const sendMessage = async (e) => {
 
 ---
 
-## Parte 4: Creando un servidor con Express
+## Parte 4: Creación de un servidor con Express
 
 **Rama:** `parte-4`
 **Descripción:** Creación de un servidor básico utilizando el framework Express de Node.js.
+
+---
+
+## Parte 5: Endpoints en Express
+
+**Rama:** `parte-5`
+**Descripción:** Creación de un endpoint POST para recibir datos. Introducción al concepto y uso de middlewares.
+
+---
+
+## Parte 6: API REST
+
+**Rama:** `parte-6`
+**Descripción:**  Desarrollo de un endpoint para consumir la función de Ollama. Comprensión del rol del backend en apps modernas.
 
 ---
