@@ -26,6 +26,8 @@ function globalReducer(state, action) {
             // Estructura de un nuevo chat
             const newChat = {
                 // Se obtiene el primer mensaje del chat como título (será el que se muestre en el historial de interacciones)
+                // Se añade un método que genera un UUID (Identificador Único Universal) para el ID
+                id: crypto.randomUUID(),
                 title: state.currentChat[0].text,
                 content: state.currentChat
             }

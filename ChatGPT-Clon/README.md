@@ -79,3 +79,10 @@ const sendMessage = async (e) => {
 **Descripción:**  Desarrollo de un endpoint para consumir la función de Ollama. Comprensión del rol del backend en apps modernas.
 
 ---
+
+## Parte 7: Creación de un CRUD Básico con Express
+
+**Rama:** `parte-7`
+**Descripción:** Implementación de operaciones CRUD (Crear, Leer, Actualizar, Eliminar) utilizando Express. Uso de Lowdb para crear un CRUD completo de las funciones de `globalReducer`.
+
+---
