@@ -44,3 +44,10 @@ const sendMessage = async (e) => {
 **Descripción:** Implementación de formularios en React utilizando React Hook Form y técnicas avanzadas de validación. Uso de la IA para creación de un FrontEnd básico. Configuración inicial del proyecto, instalación de Tailwind CSS y creación de un diseño básico para la interfaz de usuario.
 
 ---
+
+## Parte 2: Consumo de APIs (useEffect) y manejo de Ollama
+
+**Rama:** `parte-2`
+**Descripción:** Instalación de Ollama e integración con un modelo de IA ligero. Creación de un Custom Hook para el servicio *deepseek-r1:1.5b.* Uso de `useEffect` en React para consumir la API y manejar datos asíncronos. Adición del componente History en su primera versión para en un siguiente paso gestionar las consultas previas.
+
+---
