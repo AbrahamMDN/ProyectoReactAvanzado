@@ -13,7 +13,7 @@ function useOllamaHook() {
   // Definición de función asincrónica que maneja la interacción de DeepSeek R1 con el promt proporcionado por el usuario: Caso 1) Sin streaming o espera de razonamiento para leer la respuesta final de la IA
   const handleSubmit = async (_prompt) => {
     // Imprensión en consola del llamado a la función tras recibir el promt y actualización del estado de carga a true
-    console.log('handleSubmit called with prompt:', _prompt);
+    console.log('handleSubmit ejecutada con prompt:', _prompt);
     setLoading(true);
     setResponse('');
     setError(null);
