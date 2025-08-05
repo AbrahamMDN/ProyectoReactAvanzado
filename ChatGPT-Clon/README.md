@@ -86,3 +86,8 @@ const sendMessage = async (e) => {
 **Descripción:** Implementación de operaciones CRUD (Crear, Leer, Actualizar, Eliminar) utilizando Express. Uso de Lowdb para crear un CRUD completo de las funciones de `globalReducer`.
 
 ---
+
+## Parte 8: Servicios de base de datos: MongoDB
+
+**Rama:** `parte-8`
+**Descripción:** Implementación de Mongo como base de datos. Uso de `dotenv` y su configuración para variables de entorno.
